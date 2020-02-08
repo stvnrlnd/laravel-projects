@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['store']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,9 +40,9 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        Project::create(request([
-            'title',
-            'description'
+        auth()->user()->projects()->create(request()->validate([
+            'title' => 'required',
+            'description' => 'required',
         ]));
 
         return redirect('/projects');
@@ -51,7 +56,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        return $project;
     }
 
     /**
