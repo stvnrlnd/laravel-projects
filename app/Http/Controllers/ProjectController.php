@@ -9,7 +9,7 @@ class ProjectController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only(['store']);
+        $this->middleware('auth');
     }
 
     /**
@@ -19,7 +19,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return Project::all();
+        return auth()->user()->projects;
     }
 
     /**
@@ -56,6 +56,9 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        if (auth()->user()->isNot($project->owner))     {
+            abort(403);
+        }
         return $project;
     }
 
