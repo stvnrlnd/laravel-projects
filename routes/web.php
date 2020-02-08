@@ -14,11 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/projects', 'ProjectController@index');
-Route::post('/projects', 'ProjectController@store');
-Route::get('/projects/{project}', 'ProjectController@show');
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/home', 'HomeController')->name('home');
+
+    Route::resource('projects', 'ProjectController');
+});

@@ -12,7 +12,7 @@ class UserTest extends TestCase
     /** @test */
     public function it_has_projects()
     {
-        $user = factory('App\User')->create();
+        $user = create('User');
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $user->projects);
     }

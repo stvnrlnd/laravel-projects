@@ -12,7 +12,7 @@ class ProjectTest extends TestCase
     /** @test */
     public function it_has_a_path()
     {
-        $project = factory('App\Project')->create();
+        $project = create('Project');
 
         $this->assertEquals("/projects/{$project->id}", $project->path());
     }
@@ -20,7 +20,7 @@ class ProjectTest extends TestCase
     /** @test */
     public function it_has_an_owner()
     {
-        $project = factory('App\Project')->create();
+        $project = create('Project');
 
         $this->assertInstanceOf('App\User', $project->owner);
     }
