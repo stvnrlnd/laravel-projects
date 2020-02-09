@@ -42,11 +42,11 @@ class ProjectsTest extends TestCase
         $this->signIn();
 
         $project = create('Project', [
-            'owner_id' => auth()->id()
+            'owner_id' => auth()->id(),
         ]);
 
-        $project2 = create('Project',[
-            'owner_id' => create('User')->id
+        $project2 = create('Project', [
+            'owner_id' => create('User')->id,
         ]);
 
         $this->get('/projects')
@@ -72,7 +72,7 @@ class ProjectsTest extends TestCase
         $this->signIn();
 
         $project = create('Project', [
-            'owner_id' => auth()->id()
+            'owner_id' => auth()->id(),
         ]);
 
         $this->get($project->path())
@@ -86,7 +86,7 @@ class ProjectsTest extends TestCase
         $this->signIn();
 
         $project = create('Project', [
-            'owner_id' => create('User')->id
+            'owner_id' => create('User')->id,
         ]);
 
         $this->get($project->path())
@@ -99,7 +99,7 @@ class ProjectsTest extends TestCase
         $this->signIn();
 
         $this->post('/projects', raw('Project', [
-            'title' => ''
+            'title' => '',
         ]))->assertSessionHasErrors('title');
     }
 
@@ -109,7 +109,7 @@ class ProjectsTest extends TestCase
         $this->signIn();
 
         $this->post('/projects', raw('Project', [
-            'description' => ''
+            'description' => '',
         ]))->assertSessionHasErrors('description');
     }
 

@@ -51,9 +51,10 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        if (auth()->user()->isNot($project->owner))     {
+        if (auth()->user()->isNot($project->owner)) {
             abort(403);
         }
+
         return $project;
     }
 
