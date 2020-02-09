@@ -57,7 +57,7 @@ class ProjectController extends Controller
             abort(403);
         }
 
-        return $project;
+        return view('projects.show', compact('project'));
     }
 
     /**

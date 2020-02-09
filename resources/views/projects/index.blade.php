@@ -2,19 +2,17 @@
 
 @section('content')
     <div class="container mx-auto">
-        <div>
-            <a href="/projects/create">New Project</a>
-        </div>
+        <header class="flex justify-between items-center mb-3 py-4">
+            <h2 class="text-gray-600">My Projects</h2>
+            <a href="/projects/create" class="block px-4 py-3 rounded shadow no-underline bg-blue-900 text-gray-200 hover:bg-blue-800 hover:bg-white">New Project</a>
+        </header>
 
-        <div class="grid grid-cols-3 gap-4">
+        <main class="lg:grid lg:grid-cols-3 lg:gap-4">
             @forelse ($projects as $project)
-                <div class="bg-white mr-4 p-5 rounded shadow">
-                    <h3 class="font-normal text-xl py-4">{{ $project->title }}</h3>
-                    <div class="text-gray-600">{{ \Str::limit($project->description, 250) }}</div>
-                </div>
+                @include('projects._card')
             @empty
                 <div>No projects yet.</div>
             @endforelse
-        </div>
+        </main>
     </div>
 @endsection
