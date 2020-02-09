@@ -14,7 +14,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return auth()->user()->projects;
+        return view('projects.index', [
+            'projects' => auth()->user()->projects
+        ]);
     }
 
     /**
