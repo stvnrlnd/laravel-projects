@@ -1,5 +1,5 @@
 .card {
-    @apply py-5 bg-white rounded shadow;
+    @apply py-5 bg-white shadow;
 
     .card-heading {
         @apply font-normal text-xl py-4 border-l-4 border-indigo-900 p-4 mb-5;

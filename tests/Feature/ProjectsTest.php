@@ -41,13 +41,9 @@ class ProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $project = create('Project', [
-            'owner_id' => auth()->id(),
-        ]);
+        $project = auth()->user()->projects()->create(raw('Project'));
 
-        $project2 = create('Project', [
-            'owner_id' => create('User')->id,
-        ]);
+        $project2 = create('Project');
 
         $this->get('/projects')
             ->assertSee($project->title)
@@ -75,9 +71,7 @@ class ProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $project = create('Project', [
-            'owner_id' => auth()->id(),
-        ]);
+        $project = auth()->user()->projects()->create(raw('Project'));
 
         $this->get($project->path())
             ->assertSee($project->title)
@@ -89,9 +83,7 @@ class ProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $project = create('Project', [
-            'owner_id' => create('User')->id,
-        ]);
+        $project = create('Project');
 
         $this->get($project->path())
             ->assertStatus(403);
@@ -120,7 +112,9 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_an_owner()
     {
-        $this->post('/projects', raw('Project'))
+        $this->post('/projects', raw('Project', [
+            'owner_id' => ''
+        ]))
             ->assertRedirect('/login');
     }
 }

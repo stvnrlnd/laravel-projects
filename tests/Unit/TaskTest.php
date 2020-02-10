@@ -14,7 +14,7 @@ class TaskTest extends TestCase
     {
         $task = create('Task');
 
-        $this->assertEquals('/projects/' . $task->project->id . '/tasks/' . $task->id, $task->path());
+        $this->assertEquals("/projects/{$task->project->id}/tasks/{$task->id}", $task->path());
     }
 
     /** @test */

@@ -26,7 +26,7 @@ class ProjectTasksTest extends TestCase
 
         $project = create('Project');
 
-        $this->post($project->path() . '/tasks', raw('Task'))
+        $this->post($project->path() . '/tasks', [])
             ->assertStatus(403);
     }
 
@@ -39,7 +39,7 @@ class ProjectTasksTest extends TestCase
 
         $task = $project->addTask(raw('Task'));
 
-        $this->patch($task->path(), raw('Task'))
+        $this->patch($task->path(), [])
             ->assertStatus(403);
     }
 
