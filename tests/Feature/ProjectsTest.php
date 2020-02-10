@@ -113,7 +113,7 @@ class ProjectsTest extends TestCase
     public function a_project_requires_an_owner()
     {
         $this->post('/projects', raw('Project', [
-            'owner_id' => ''
+            'owner_id' => '',
         ]))
             ->assertRedirect('/login');
     }

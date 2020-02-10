@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Task;
 use App\Project;
+use App\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -41,7 +41,7 @@ class TaskController extends Controller
         }
 
         $project->addTask(request()->validate([
-            'body' => 'required'
+            'body' => 'required',
         ]));
 
         return redirect($project->path());
@@ -84,8 +84,9 @@ class TaskController extends Controller
 
         $task->update([
             'body' => request('body'),
-            'completed' => request()->has('completed')
+            'completed' => request()->has('completed'),
         ]);
+
         return redirect($project->path());
     }
 

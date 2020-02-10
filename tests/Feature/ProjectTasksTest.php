@@ -26,7 +26,7 @@ class ProjectTasksTest extends TestCase
 
         $project = create('Project');
 
-        $this->post($project->path() . '/tasks', [])
+        $this->post($project->path().'/tasks', [])
             ->assertStatus(403);
     }
 
@@ -52,7 +52,7 @@ class ProjectTasksTest extends TestCase
 
         $task = raw('Task');
 
-        $this->post($project->path() . '/tasks', $task);
+        $this->post($project->path().'/tasks', $task);
 
         $this->get($project->path())
             ->assertSee($task['body']);
@@ -68,7 +68,7 @@ class ProjectTasksTest extends TestCase
         $task = $project->addTask(raw('Task'));
 
         $newAttributes = [
-            'body' => $this->faker->sentence
+            'body' => $this->faker->sentence,
         ];
 
         $this->patch($task->path(), $newAttributes);
@@ -83,7 +83,7 @@ class ProjectTasksTest extends TestCase
 
         $project = auth()->user()->projects()->create(raw('Project'));
 
-        $this->post($project->path() . '/tasks', raw('Task', [
+        $this->post($project->path().'/tasks', raw('Task', [
             'body' => '',
         ]))->assertSessionHasErrors('body');
     }
