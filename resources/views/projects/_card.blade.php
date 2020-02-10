@@ -1,6 +1,6 @@
 <div class="card">
     <h3 class="card-heading">
-        <a href="projects/{{$project->id}}" class="text-blue-900 no-underline">
+        <a href="projects/{{$project->id}}" class="text-indigo-900 no-underline">
             {{ $project->title }}
         </a>
     </h3>

@@ -10,19 +10,38 @@
 
         <main class="flex -mx-3">
             <div class="w-3/4 mx-3">
-                <div class="mb-12">
+                <div class="mb-8">
                     <h3 class="text-gray-600 font-normal text-lg mb-3">Tasks</h3>
-                    <div class="card">
+                    <div class="card mb-3">
                         <div class="card-body">
-                            test
+                            <form action="{{ $project->path() }}/tasks" method="POST">
+                                @csrf
+                                @method('POST')
+
+                                <input type="text" name="body" placeholder="What needs to be done?" class="w-full">
+                            </form>
                         </div>
                     </div>
+                    @forelse ($project->tasks as $task)
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <form action="{{ $project->path() }}/tasks/{{ $task->id }}" method="POST" class="flex">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="text" name="body" value="{{ $task->body }}" class="w-full{{ $task->completed ? ' text-gray-600' : '' }}">
+                                    <input type="checkbox" name="completed" id="" onChange="this.form.submit()"{{ $task->completed ? ' checked' : '' }}>
+                                </form>
+                            </div>
+                        </div>
+                    @empty
+                        No tasks yet.
+                    @endforelse
                 </div>
                 <div>
                     <h3 class="text-gray-600 font-normal text-lg mb-3">Notes</h3>
                     <div class="card">
                         <div class="card-body">
-                            <textarea class="h-48 w-full">test</textarea>
+                            <textarea class="h-48 w-full"></textarea>
                         </div>
                     </div>
                 </div>

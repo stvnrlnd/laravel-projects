@@ -62,8 +62,12 @@ class ProjectsTest extends TestCase
         $this->get('/projects/create')
             ->assertStatus(200);
 
-        $this->post('/projects', raw('Project'))
-            ->assertRedirect('/projects');
+        $project = raw('Project');
+        $response = $this->post('/projects', $project);
+
+        $this->get($response->headers->get('Location'))
+            ->assertSee($project['title'])
+            ->assertSee($project['description']);
     }
 
     /** @test */
