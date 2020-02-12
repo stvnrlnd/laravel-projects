@@ -36,12 +36,10 @@ class TaskController extends Controller
      */
     public function store(Request $request, Project $project)
     {
-        if (auth()->user()->isNot($project->owner)) {
-            abort(403);
-        }
+        $this->authorize('update', $project);
 
         $project->addTask(request()->validate([
-            'body' => 'required',
+            'body' => 'required'
         ]));
 
         return redirect($project->path());
@@ -78,9 +76,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, Project $project, Task $task)
     {
-        if (auth()->user()->isNot($project->owner)) {
-            abort(403);
-        }
+        $this->authorize('update', $project);
 
         $task->update([
             'body' => request('body'),

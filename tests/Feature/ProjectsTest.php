@@ -11,7 +11,7 @@ class ProjectsTest extends TestCase
     use WithFaker, RefreshDatabase;
 
     /** @test */
-    public function a_guest_cannot_view_projects()
+    public function a_guest_cannot_view_any_projects()
     {
         $this->get('/projects')
             ->assertRedirect('/login');
@@ -28,7 +28,7 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
-    public function a_guest_cannot_view_a_project()
+    public function a_guest_cannot_view_a_single_project()
     {
         $project = create('Project');
 
@@ -37,7 +37,7 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_view_only_their_projects()
+    public function a_project_owner_can_view_only_their_projects()
     {
         $this->signIn();
 
@@ -63,11 +63,12 @@ class ProjectsTest extends TestCase
 
         $this->get($response->headers->get('Location'))
             ->assertSee($project['title'])
-            ->assertSee($project['description']);
+            ->assertSee($project['description'])
+            ->assertSee($project['notes']);
     }
 
     /** @test */
-    public function a_user_can_view_their_own_project()
+    public function a_project_owner_can_view_their_own_project()
     {
         $this->signIn();
 
@@ -79,13 +80,40 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_cannot_view_the_project_of_another_user()
+    public function a_project_owner_can_update_their_own_project()
+    {
+        $this->signIn();
+
+        $projectOriginal = auth()->user()->projects()->create(raw('Project'));
+
+        $projectAltered = raw('Project', [
+            'owner_id' => $projectOriginal->owner->id
+        ]);
+
+        $this->patch($projectOriginal->path(), $projectAltered);
+
+        $this->assertDatabaseHas('projects', $projectAltered);
+    }
+
+    /** @test */
+    public function a_user_cannot_view_the_project_of_a_project_owner()
     {
         $this->signIn();
 
         $project = create('Project');
 
         $this->get($project->path())
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_user_cannot_update_the_project_of_a_project_owner()
+    {
+        $this->signIn();
+
+        $project = create('Project');
+
+        $this->patch($project->path(), [])
             ->assertStatus(403);
     }
 
@@ -114,7 +142,6 @@ class ProjectsTest extends TestCase
     {
         $this->post('/projects', raw('Project', [
             'owner_id' => '',
-        ]))
-            ->assertRedirect('/login');
+        ]))->assertRedirect('/login');
     }
 }

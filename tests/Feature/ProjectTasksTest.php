@@ -65,15 +65,15 @@ class ProjectTasksTest extends TestCase
 
         $project = auth()->user()->projects()->create(raw('Project'));
 
-        $task = $project->addTask(raw('Task'));
+        $taskOriginal = $project->addTask(raw('Task'));
 
-        $newAttributes = [
-            'body' => $this->faker->sentence,
-        ];
+        $taskAltered = raw('Task', [
+            'project_id' => $project->id
+        ]);
 
-        $this->patch($task->path(), $newAttributes);
+        $this->patch($taskOriginal->path(), $taskAltered);
 
-        $this->assertDatabaseHas('tasks', $newAttributes);
+        $this->assertDatabaseHas('tasks', $taskAltered);
     }
 
     /** @test */

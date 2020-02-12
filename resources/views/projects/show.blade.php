@@ -25,7 +25,7 @@
                     @forelse ($project->tasks as $task)
                         <div class="card mb-3">
                             <div class="card-body">
-                                <form action="{{ $project->path() }}/tasks/{{ $task->id }}" method="POST" class="flex">
+                                <form action="{{ $project->path() }}/tasks/{{ $task->id }}/edit" method="POST" class="flex">
                                     @csrf
                                     @method('PATCH')
                                     <input type="text" name="body" value="{{ $task->body }}" class="w-full{{ $task->completed ? ' text-gray-600' : '' }}">
@@ -39,9 +39,15 @@
                 </div>
                 <div>
                     <h3 class="text-gray-600 font-normal text-lg mb-3">Notes</h3>
-                    <div class="card">
+                    <div class="card mb-3">
                         <div class="card-body">
-                            <textarea class="h-48 w-full"></textarea>
+                            <form action="{{ $project->path() }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+
+                                <textarea class="h-48 w-full" name="notes">{{ $project->notes }}</textarea>
+                                <button type="submit" class="block px-4 py-3 rounded shadow no-underline bg-indigo-900 text-gray-200 hover:bg-indigo-800 hover:bg-white">Save</button>
+                            </form>
                         </div>
                     </div>
                 </div>
