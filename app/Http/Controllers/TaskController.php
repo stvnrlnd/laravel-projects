@@ -39,7 +39,7 @@ class TaskController extends Controller
         $this->authorize('update', $project);
 
         $project->addTask(request()->validate([
-            'body' => 'required'
+            'body' => 'required',
         ]));
 
         return redirect($project->path());

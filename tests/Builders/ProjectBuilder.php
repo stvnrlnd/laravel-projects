@@ -24,11 +24,11 @@ class ProjectBuilder
     public function build()
     {
         $project = create('Project', [
-            'owner_id' => $this->user->id ?? create('User')->id
+            'owner_id' => $this->user->id ?? create('User')->id,
         ]);
 
         create('Task', [
-            'project_id' => $project->id
+            'project_id' => $project->id,
         ], $this->taskCount);
 
         return $project;

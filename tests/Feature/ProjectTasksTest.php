@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Facades\Tests\Builders\ProjectBuilder;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class ProjectTasksTest extends TestCase
 {
@@ -78,7 +78,7 @@ class ProjectTasksTest extends TestCase
         $project = ProjectBuilder::build();
 
         $this->actingAs($project->owner)
-            ->post($project->path().'/tasks', raw('Task', ['body' => '',]))
+            ->post($project->path().'/tasks', raw('Task', ['body' => '']))
             ->assertSessionHasErrors('body');
     }
 }

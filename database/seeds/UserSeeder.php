@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
         // create a test user
         factory('App\User')->create([
             'name' => 'user',
-            'email' => 'user@example.com'
+            'email' => 'user@example.com',
         ]);
 
         // create 50 random test users

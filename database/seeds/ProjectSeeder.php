@@ -12,7 +12,7 @@ class ProjectSeeder extends Seeder
     public function run()
     {
         factory('App\Project', 10)->create([
-            'owner_id' => 1
+            'owner_id' => 1,
         ]);
     }
 }

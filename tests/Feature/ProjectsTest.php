@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Facades\Tests\Builders\ProjectBuilder;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class ProjectsTest extends TestCase
 {
@@ -85,7 +85,7 @@ class ProjectsTest extends TestCase
         $project = ProjectBuilder::build();
 
         $projectAttributes = raw('Project', [
-            'owner_id' => $project->owner->id
+            'owner_id' => $project->owner->id,
         ]);
 
         $this->actingAs($project->owner)
@@ -121,7 +121,7 @@ class ProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $this->post('/projects', raw('Project', ['title' => '',]))
+        $this->post('/projects', raw('Project', ['title' => '']))
             ->assertSessionHasErrors('title');
     }
 
@@ -130,14 +130,14 @@ class ProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $this->post('/projects', raw('Project', ['description' => '',]))
+        $this->post('/projects', raw('Project', ['description' => '']))
             ->assertSessionHasErrors('description');
     }
 
     /** @test */
     public function a_project_requires_an_owner()
     {
-        $this->post('/projects', raw('Project', ['owner_id' => '',]))
+        $this->post('/projects', raw('Project', ['owner_id' => '']))
             ->assertRedirect('/login');
     }
 }

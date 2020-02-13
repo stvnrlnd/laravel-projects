@@ -12,7 +12,7 @@ class TaskSeeder extends Seeder
     public function run()
     {
         factory('App\Task', 10)->create([
-            'project_id' => 1
+            'project_id' => 1,
         ]);
     }
 }
