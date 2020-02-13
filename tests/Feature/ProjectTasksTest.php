@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Facades\Tests\Builders\ProjectBuilder;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProjectTasksTest extends TestCase
 {
@@ -13,7 +14,7 @@ class ProjectTasksTest extends TestCase
     /** @test */
     public function a_guest_cannot_add_a_task_to_a_project()
     {
-        $project = create('Project');
+        $project = ProjectBuilder::build();
 
         $this->post($project->path().'/tasks', [])
             ->assertRedirect('/login');
@@ -24,7 +25,7 @@ class ProjectTasksTest extends TestCase
     {
         $this->signIn();
 
-        $project = create('Project');
+        $project = ProjectBuilder::build();
 
         $this->post($project->path().'/tasks', [])
             ->assertStatus(403);
@@ -35,56 +36,49 @@ class ProjectTasksTest extends TestCase
     {
         $this->signIn();
 
-        $project = create('Project');
+        $project = ProjectBuilder::withTasks(1)
+            ->build();
 
-        $task = $project->addTask(raw('Task'));
-
-        $this->patch($task->path(), [])
+        $this->patch($project->tasks->first()->path(), [])
             ->assertStatus(403);
     }
 
     /** @test */
     public function a_project_can_have_tasks()
     {
-        $this->signIn();
-
-        $project = auth()->user()->projects()->create(raw('Project'));
+        $project = ProjectBuilder::build();
 
         $task = raw('Task');
 
-        $this->post($project->path().'/tasks', $task);
+        $this->actingAs($project->owner)
+            ->post($project->path().'/tasks', $task);
 
-        $this->get($project->path())
+        $this->actingAs($project->owner)
+            ->get($project->path())
             ->assertSee($task['body']);
     }
 
     /** @test */
     public function a_task_can_be_updated()
     {
-        $this->signIn();
+        $project = ProjectBuilder::withTasks(1)
+            ->build();
 
-        $project = auth()->user()->projects()->create(raw('Project'));
+        $taskAttributes = raw('Task', ['project_id' => $project->id]);
 
-        $taskOriginal = $project->addTask(raw('Task'));
+        $this->actingAs($project->owner)
+            ->patch($project->tasks->first()->path(), $taskAttributes);
 
-        $taskAltered = raw('Task', [
-            'project_id' => $project->id
-        ]);
-
-        $this->patch($taskOriginal->path(), $taskAltered);
-
-        $this->assertDatabaseHas('tasks', $taskAltered);
+        $this->assertDatabaseHas('tasks', $taskAttributes);
     }
 
     /** @test */
     public function a_task_requires_a_body()
     {
-        $this->signIn();
+        $project = ProjectBuilder::build();
 
-        $project = auth()->user()->projects()->create(raw('Project'));
-
-        $this->post($project->path().'/tasks', raw('Task', [
-            'body' => '',
-        ]))->assertSessionHasErrors('body');
+        $this->actingAs($project->owner)
+            ->post($project->path().'/tasks', raw('Task', ['body' => '',]))
+            ->assertSessionHasErrors('body');
     }
 }

@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Facades\Tests\Builders\ProjectBuilder;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProjectsTest extends TestCase
 {
@@ -39,14 +40,13 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_owner_can_view_only_their_projects()
     {
-        $this->signIn();
-
-        $project = auth()->user()->projects()->create(raw('Project'));
+        $project1 = create('Project');
 
         $project2 = create('Project');
 
-        $this->get('/projects')
-            ->assertSee($project->title)
+        $this->actingAs($project1->owner)
+            ->get('/projects')
+            ->assertSee($project1->title)
             ->assertDontSee($project2->title);
     }
 
@@ -82,17 +82,16 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_owner_can_update_their_own_project()
     {
-        $this->signIn();
+        $project = ProjectBuilder::build();
 
-        $projectOriginal = auth()->user()->projects()->create(raw('Project'));
-
-        $projectAltered = raw('Project', [
-            'owner_id' => $projectOriginal->owner->id
+        $projectAttributes = raw('Project', [
+            'owner_id' => $project->owner->id
         ]);
 
-        $this->patch($projectOriginal->path(), $projectAltered);
+        $this->actingAs($project->owner)
+            ->patch($project->path(), $projectAttributes);
 
-        $this->assertDatabaseHas('projects', $projectAltered);
+        $this->assertDatabaseHas('projects', $projectAttributes);
     }
 
     /** @test */
@@ -122,9 +121,8 @@ class ProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $this->post('/projects', raw('Project', [
-            'title' => '',
-        ]))->assertSessionHasErrors('title');
+        $this->post('/projects', raw('Project', ['title' => '',]))
+            ->assertSessionHasErrors('title');
     }
 
     /** @test */
@@ -132,16 +130,14 @@ class ProjectsTest extends TestCase
     {
         $this->signIn();
 
-        $this->post('/projects', raw('Project', [
-            'description' => '',
-        ]))->assertSessionHasErrors('description');
+        $this->post('/projects', raw('Project', ['description' => '',]))
+            ->assertSessionHasErrors('description');
     }
 
     /** @test */
     public function a_project_requires_an_owner()
     {
-        $this->post('/projects', raw('Project', [
-            'owner_id' => '',
-        ]))->assertRedirect('/login');
+        $this->post('/projects', raw('Project', ['owner_id' => '',]))
+            ->assertRedirect('/login');
     }
 }
