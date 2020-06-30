@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="container mx-auto">
-        <header class="flex justify-between items-center mb-3 py-4">
+        <header class="flex items-center justify-between py-4 mb-3">
             <h2 class="text-gray-600">My Projects</h2>
-            <a href="/projects/create" class="block px-4 py-3 rounded shadow no-underline bg-indigo-900 text-gray-200 hover:bg-indigo-800 hover:bg-white">New Project</a>
+            <a href="/projects/create" class="block px-4 py-3 text-gray-200 no-underline bg-indigo-500 rounded shadow hover:bg-indigo-800 hover:bg-white">New Project</a>
         </header>
 
         <main class="lg:grid lg:grid-cols-3 lg:gap-4">

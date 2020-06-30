@@ -1,12 +1,12 @@
 .card {
-    @apply py-5 bg-white shadow;
+    @apply py-5 bg-white border-l-4 border-indigo-600 rounded-lg shadow;
 
     .card-heading {
-        @apply font-normal text-xl py-4 border-l-4 border-indigo-900 p-4 mb-5;
+        @apply p-4 py-4 mb-5 text-xl font-normal;
     }
 
     .card-body {
-        @apply px-5;
+        @apply px-5 leading-tight;
     }
 }
 
