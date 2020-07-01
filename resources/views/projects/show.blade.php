@@ -8,10 +8,26 @@
             </p>
         </header>
 
-        <main class="flex -mx-3">
-            <div class="w-3/4 mx-3">
-                <div class="mb-8">
-                    <h3 class="mb-3 text-lg font-normal text-gray-600">Tasks</h3>
+        <main>
+            @include('projects._card')
+
+            <div class="flex mt-3">
+                <div class="w-1/2 mx-1">
+                    <h3 class="mb-3 text-xs font-semibold text-gray-600 uppercase">Notes</h3>
+                    <div class="mb-3 card">
+                        <div class="card-body">
+                            <form action="{{ $project->path() }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+
+                                <textarea class="w-full h-48 resize-none" name="notes">{{ $project->notes }}</textarea>
+                                <button type="submit" class="block px-4 py-3 text-gray-200 no-underline bg-indigo-500 rounded shadow hover:bg-indigo-800 hover:bg-white">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-1/2 mx-1">
+                    <h3 class="mb-3 text-xs font-semibold text-gray-600 uppercase">Tasks</h3>
                     <div class="mb-3 card">
                         <div class="card-body">
                             <form action="{{ $project->path() }}/tasks" method="POST">
@@ -37,23 +53,6 @@
                         No tasks yet.
                     @endforelse
                 </div>
-                <div>
-                    <h3 class="mb-3 text-lg font-normal text-gray-600">Notes</h3>
-                    <div class="mb-3 card">
-                        <div class="card-body">
-                            <form action="{{ $project->path() }}" method="POST">
-                                @csrf
-                                @method('PATCH')
-
-                                <textarea class="w-full h-48 resize-none" name="notes">{{ $project->notes }}</textarea>
-                                <button type="submit" class="block px-4 py-3 text-gray-200 no-underline bg-indigo-500 rounded shadow hover:bg-indigo-800 hover:bg-white">Save</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="w-1/4 mx-3">
-                @include('projects._card')
             </div>
         </main>
     </div>

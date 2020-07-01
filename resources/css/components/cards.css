@@ -2,7 +2,7 @@
     @apply py-5 bg-white border-l-4 border-indigo-600 rounded-lg shadow;
 
     .card-heading {
-        @apply p-4 py-4 mb-5 text-xl font-normal;
+        @apply p-4 mb-5 text-xl font-normal;
     }
 
     .card-body {

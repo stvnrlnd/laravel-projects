@@ -80,18 +80,19 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
-    public function a_project_owner_can_update_their_own_project()
+    public function the_project_owner_can_update_the_project()
     {
         $project = ProjectBuilder::build();
 
-        $projectAttributes = raw('Project', [
-            'owner_id' => $project->owner->id,
-        ]);
-
         $this->actingAs($project->owner)
-            ->patch($project->path(), $projectAttributes);
+            ->patch($project->path(), $attributes = raw('Project', [
+                'owner_id' => $project->owner->id,
+                'title' => 'Changed title',
+                'description' => 'Changed description',
+                'notes' => 'Changed notes'
+            ]));
 
-        $this->assertDatabaseHas('projects', $projectAttributes);
+        $this->assertDatabaseHas('projects', $attributes);
     }
 
     /** @test */
