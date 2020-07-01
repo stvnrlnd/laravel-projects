@@ -89,7 +89,7 @@ class ProjectsTest extends TestCase
                 'owner_id' => $project->owner->id,
                 'title' => 'Changed title',
                 'description' => 'Changed description',
-                'notes' => 'Changed notes'
+                'notes' => 'Changed notes',
             ]));
 
         $this->assertDatabaseHas('projects', $attributes);
